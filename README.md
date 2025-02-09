@@ -1,6 +1,13 @@
 # FT_LINEAR_REGRESSION
 
-👉 
+👉 POUR LANCER LE PROGRAMME TRAINING :
+    'python -m programs.training ./data/data.csv'
+
+👉 POUR LANCER LE PROGRAMME PREDICTION :
+    'python -m programs.prediction ./data/data.csv'
+
+## La fonction model(): 
+
 
 ## Les fonctions de couts : 
 
@@ -31,3 +38,17 @@ valeurs.
 MSE = Plus simple à optimiser, mais sensible aux valeurs extrêmes.
 MAE = Plus robuste, mais plus difficile à minimiser avec la descente de gradient.
 🚀 Choix recommandé pour la régression linéaire classique : MSE.
+
+
+## L'algorithme de minimisation de la fonction de cout : 
+🛠️ Comment fonctionne l'algo dans les grandes lignes :
+
+On fixe a 0 les theta0 et theta1.
+On fixe a 1000 par exemple le nombre d'iterations maximales du calcul (on ne peut pas calculer a l'infini).
+On determine un "learning rate", en general, on le fixe a 0.01.
+Puis :
+On fait une prédiction avec le modèle (ŷ = Xθ).
+On mesure l’erreur avec la fonction de coût J(θ).
+On calcule le gradient (∇J(θ)) pour savoir comment ajuster θ.
+On met à jour θ avec θ = θ - α * gradient.
+On répète jusqu’à ce que J(θ) soit minimisé.

@@ -24,7 +24,7 @@ def is_valid_dataframe(df: pd.DataFrame)-> bool:
 # Pour etre utilise pr les libs telles que NumPy Dot, ou sklearn, on utilise
 # des vecteurs 2D, or ici, y et x sont a une dimension (series ou listes).
 # On va donc reshape pour les rendre utilisables.
-def prepare_data(df: pd.DataFrame)-> pd.DataFrame:
+def prepare_data(df: pd.DataFrame)-> tuple[np.ndarray, np.ndarray]:
     
     x=df.iloc[:, 0]
     y=df.iloc[:, 1]
@@ -38,12 +38,13 @@ def prepare_data(df: pd.DataFrame)-> pd.DataFrame:
 
     # Standardization : 
     # obligatoire en Regression Lineaire pour eviter que le modele ne favorise les
-    # valeurs les plus grandes, on "lisse"
+    # valeurs les plus grandes, on "lisse" pour avoir des valeurs autour de -2 et 2
     x_mean=x.mean()
     x_std=x.std()
     x_standardized=(x - x_mean) / x_std
+    # print(f"Min de x_standardized : {x_standardized.min()}, Max : {x_standardized.max()}")
 
     # Mise en place de la matrice des features (x1, x2, x3 ...), avec deux colonnes,
     # en effet, on prevoit pour chaque sample la place pour le theta0 (le b).
     X=np.hstack((x_standardized, np.ones(x.shape)))
-    # print(X)
+    return X, y
