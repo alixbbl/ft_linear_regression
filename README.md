@@ -4,7 +4,7 @@
     'python -m programs.training ./data/data.csv'
 
 👉 POUR LANCER LE PROGRAMME PREDICTION :
-    'python -m programs.prediction ./data/data.csv'
+    'python -m programs.prediction <nombre mileage>'
 
 ## La fonction model(): 
 
@@ -37,7 +37,7 @@ valeurs.
 
 MSE = Plus simple à optimiser, mais sensible aux valeurs extrêmes.
 MAE = Plus robuste, mais plus difficile à minimiser avec la descente de gradient.
-🚀 Choix recommandé pour la régression linéaire classique : MSE.
+Choix recommandé pour la régression linéaire classique : MSE.
 
 
 ## L'algorithme de minimisation de la fonction de cout : 
