@@ -3,75 +3,64 @@ import numpy as np
 import argparse, os
 from utils.prepare_data import is_valid_path, is_valid_dataframe, prepare_data
 import matplotlib.pyplot as plt
-
+ 
 # ************************ LOGIQUE REGRESSION LINEAIRE **************************
-
-# Attention : on travaille en objet NumPy et pas en Df...
-# On retourne simplement le produit matriciel des deux np
-def model(X: np.ndarray, theta: np.ndarray)-> np.ndarray:
-    return X.dot(theta)
-
-# Mean Square Error (/2) est notre fonction de cout (classique en regression lineaire)
-def cost_function(X: np.ndarray, y: np.ndarray, theta: np.ndarray)-> np.ndarray:
-    m=len(y)
-    return 1/(2*m) * np.sum((model(X, theta) - y)**2)
-
-# La fonction de gradient est la derivee de la fonction de cout, elle permet de 
-# nous indiquer dans quelle direction il faut modifire les parametres de theta
-# pour ameliorer la performance de notre modele
-def gradient(X: np.ndarray, y: np.ndarray, theta: np.ndarray)-> None:
-    m=len(y)
-    predictions=model(X, theta)
-    error=predictions - y # calcul de l'erreur
-    return (1/m) * X.T.dot(error)
-
-# Fonction de descente de gradient
-def gradient_descent(X: np.ndarray, y: np.ndarray, theta0=0, theta1=0,\
-                     max_iterations=1000,\
-                        learning_rate=0.001)-> np.ndarray:
-    theta=np.array([[theta0], [theta1]], dtype=np.float64)
-    
-    for i in range(0, max_iterations):
-        grad=gradient(X, y, theta)
-        theta -= learning_rate * grad
-        # if i % 100 == 0:
-        #     cost = cost_function(X, y, theta)
-        #     print(f"Iteration {i}: Cost = {cost:.4f}, theta = {theta.T}")
-    return theta
+ 
+# on prend un learning_rate basique de 0.01
+# La fonction regroupe les etapes de calcul de predisctions, de l'erreur, du cout pour cette erreur
+# puis la mise a jour du
+def gradient_descent(X, y, max_iterations=1000, learning_rate=0.01):
+ 
+    m, n=X.shape
+    theta=np.zeros((n, 1))
+    cost_report=[]
+ 
+    for i in range(max_iterations):
+ 
+        predictions=X.dot(theta) # on multiplie la matrice des km normalises par le vecteur (0, 0), debut de la descente de gradient
+        errors=predictions-y # on calcule l'erreur entre la matrice prediction et la matrice des prix reels du dataset
+        gradient=(1/m) * X.T.dot(errors) # formule du gradient
+        theta-=learning_rate * gradient # formule d'actualisation de theta (theta0, theta1) l'intercept et la pente
+        cost=(1/(2*m)) * np.sum(errors ** 2) # calcul du cout (indicatif de suivi de la descente de gradient)
+        cost_report.append(cost)
+       
+        if i%100==0:
+            print(f"Iteration {i}: Cost = {cost:.4f}, theta = {theta.T}")
+   
+    return theta, cost_report
     # Ici, la formule utilise la pente du gradient+learning rate pour donner la "direction"
-
-
+ 
+ 
 # ******************************** MAIN ET PARSER *******************************
-
+ 
 def main(argpath):
+   
     if is_valid_path(argpath):
+       
         try:
             dataframe=pd.read_csv(argpath)
             if is_valid_dataframe(dataframe):
+               
                 try:
-                    X, y=prepare_data(dataframe)
-                    y_mean=y.mean()
-                    y_centered=y - y_mean
-                    theta_standardized=gradient_descent(X, y_centered)
-                    x_std=dataframe.iloc[:, 0].std()
-                    theta0_real = theta_standardized[0, 0]
-                    theta1_real = theta_standardized[1, 0] / x_std
-                    theta_real = np.array([[theta0_real], [theta1_real]])
-                    predictions=model(X, theta_real)
-                    x=dataframe.iloc[:, 0]
-                    y=dataframe.iloc[:, 1]
-                    plt.scatter(x, y)
-                    plt.plot(x, predictions, c='r')
-                    plt.show()
-                    # print(f"Theta0 : {theta_standardized[0, 0]}")
-                    # print(f"Theta1 réel (échelle originale) : {theta1_real}")
-                    # imprimer un output.txt contenant theta
+                    X, y, xmin, xmax=prepare_data(dataframe)
+                    theta_norm=gradient_descent(X, y)
+                    theta1_real=theta_norm[0, 0] / (xmax - xmin)
+                    theta0_real=theta_norm[1, 0] - theta1_real * xmin
+ 
+                    theta=np.array([[theta0_real], [theta1_real]])
+                    print(f"Theta : {theta}")
+ 
+                    with open('theta.txt', 'w') as file:
+                        file.write(f'{theta0_real}\n{theta1_real}')
+                        print('Success printing the theta file!')
+               
                 except Exception as e:
                     print(f'{e}')
+       
         except Exception as e:
             print(f'{e}')
-
-
+ 
+ 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('csv_file',\

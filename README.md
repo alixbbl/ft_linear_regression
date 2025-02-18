@@ -41,6 +41,8 @@ MAE = Plus robuste, mais plus difficile à minimiser avec la descente de gradien
 
 
 ## L'algorithme de minimisation de la fonction de cout : 
+
+
 🛠️ Comment fonctionne l'algo dans les grandes lignes :
 
 On fixe a 0 les theta0 et theta1.
