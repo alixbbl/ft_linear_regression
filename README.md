@@ -4,7 +4,7 @@
     'python -m programs.training ./data/data.csv'
 
 👉 POUR LANCER LE PROGRAMME PREDICTION :
-    'python -m programs.prediction <nombre mileage>'
+    'python -m programs.prediction <nombre mileage> <thetas_filepath>'
 
 ## La fonction model(): 
 
