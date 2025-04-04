@@ -6,6 +6,8 @@
 👉 POUR LANCER LE PROGRAMME PREDICTION :
     'python -m programs.prediction <thetas_filepath> <dataset_for_graph_filepath>'
 
+## -- Quelques concepts un peu matheux mais utiles --
+
 ## Les fonctions de couts : 
 
 La MSE (Erreur Quadratique Moyenne) comme la MAE (Mean Absolute Error) sont des fonctions
@@ -39,12 +41,11 @@ Choix recommandé pour la régression linéaire classique : MSE.
 
 ## L'algorithme de minimisation de la fonction de cout : 
 
-
 🛠️ Comment fonctionne l'algo dans les grandes lignes :
 
 On fixe a 0 les theta0 et theta1.
 On fixe a 1000 par exemple le nombre d'iterations maximales du calcul (on ne peut pas calculer a l'infini).
-On determine un "learning rate", en general, on le fixe a 0.01.
+On determine un "learning rate", en general, on le fixe au debut bas, a 0.01 ou 0.1.
 Puis :
 On fait une prédiction avec le modèle (ŷ = Xθ).
 On mesure l’erreur avec la fonction de coût J(θ).
