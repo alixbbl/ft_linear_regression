@@ -24,19 +24,25 @@ def ft_predict(theta: np.ndarray, mileage: int)-> float:
  
 def main(args):
     try:
-        if args.mileage is None:
+        mileage = 0
+        try: 
+            mileage = int(input('Please enter a realistic mileage : '))
+        except ValueError:
+            print("This won't work for me buddy ...")
             mileage=0
         else:
-            mileage=abs(args.mileage)
+            mileage=abs(mileage)
         theta=np.zeros(2)
         
-        if os.path.exists(args.input):
-            with open(args.input, 'r') as input:
-                theta_lines=input.readlines()
+        if os.path.exists(args.thetas_input):
+            with open(args.thetas_input, 'r') as thetas_input:
+                theta_lines=thetas_input.readlines()
                 if len(theta_lines) == 2:
                     try:
                         theta[0] = float(theta_lines[0].strip())
                         theta[1] = float(theta_lines[1].strip())
+                        print(theta[0])
+                        print(theta[1])
 
                     except Exception as e:
                         raise("Corrupted data in the theta file.")
@@ -67,6 +73,7 @@ def main(args):
         plt.title('Linear Regression: Price vs Mileage')
         plt.legend()
         plt.show()
+    
     except KeyboardInterrupt:
        print('Oh, you jus press CTRL+C, bye bye !')
        sys.exit(0)
@@ -74,10 +81,7 @@ def main(args):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('mileage',\
-                        type = int,\
-                        help = "Please enter a valid mileage...")
-    parser.add_argument('input',\
+    parser.add_argument('thetas_input',\
                         type = str,\
                         help = "Corresponds to the path of the theta file.")
     parser.add_argument('data_for_graphic',\

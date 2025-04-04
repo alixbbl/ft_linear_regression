@@ -4,7 +4,7 @@
     'python -m programs.training ./data/data.csv'
 
 👉 POUR LANCER LE PROGRAMME PREDICTION :
-    'python -m programs.prediction <nombre mileage> <thetas_filepath>'
+    'python -m programs.prediction <thetas_filepath> <dataset_for_graph_filepath>'
 
 ## Les fonctions de couts : 
 
