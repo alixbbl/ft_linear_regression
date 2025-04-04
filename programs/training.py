@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import argparse, os
+import argparse, sys
 from utils.prepare_data import is_valid_path, is_valid_dataframe, prepare_data
 import matplotlib.pyplot as plt
  
@@ -24,7 +24,7 @@ def gradient_descent(X, y, max_iterations=1000, learning_rate=0.1):
         cost = (1/(2*m)) * np.sum(errors ** 2) # calcul du cout (indicatif de suivi de la descente de gradient)
         cost_report.append(cost)
        
-        if i%100 == 0:
+        if i % 100 == 0:
             print(f"Iteration {i}: Cost = {cost:.4f}, theta = {theta.T}")
    
     return theta, cost_report
@@ -35,38 +35,42 @@ def gradient_descent(X, y, max_iterations=1000, learning_rate=0.1):
  
 def main(argpath):
    
-    if is_valid_path(argpath):
-       
-        try:
-            dataframe = pd.read_csv(argpath)
-            if is_valid_dataframe(dataframe):
-               
-                try:
-                    X, y, xmin, xmax = prepare_data(dataframe)
-                    theta_norm, cost_report = gradient_descent(X, y)
-                    theta1_real=theta_norm[0, 0] / (xmax - xmin)
-                    theta0_real=theta_norm[1, 0] - theta1_real * xmin
-                    plt.plot(cost_report)
-                    plt.xlabel("Iterations")
-                    plt.ylabel("Cost")
-                    plt.title("Gradient Descent Progress")
-                    plt.grid(True)
-                    plt.show()
- 
-                    theta=np.array([[theta0_real], [theta1_real]])
-                    print(f"Theta : {theta}")
- 
-                    with open('theta.txt', 'w') as file:
-                        file.write(f'{theta0_real}\n{theta1_real}')
-                        print('Success printing the theta file!')
-               
-                except Exception as e:
-                    print(f'{e}')
-       
-        except Exception as e:
-            print(f'{e}')
- 
- 
+    try:
+        if is_valid_path(argpath):
+            
+            try:
+                dataframe = pd.read_csv(argpath)
+                
+                if is_valid_dataframe(dataframe):
+                    try:
+                        X, y, xmin, xmax = prepare_data(dataframe)
+                        theta_norm, cost_report = gradient_descent(X, y)
+                        theta1_real=theta_norm[0, 0] / (xmax - xmin)
+                        theta0_real=theta_norm[1, 0] - theta1_real * xmin
+                        plt.plot(cost_report)
+                        plt.xlabel("Iterations")
+                        plt.ylabel("Cost")
+                        plt.title("Gradient Descent Progress")
+                        plt.grid(True)
+                        plt.show()
+    
+                        theta=np.array([[theta0_real], [theta1_real]])
+                        print(f"Theta : {theta}")
+                        
+                        with open('theta.txt', 'w') as file:
+                            file.write(f'{theta0_real}\n{theta1_real}')
+                            print('Success printing the theta file!')
+                
+                    except Exception as e:
+                        print(f'{e}')
+        
+            except Exception as e:
+                print(f'{e}')
+   
+    except KeyboardInterrupt:
+       print('Oh, you jus press CTRL+C, bye bye !')
+       sys.exit(0)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('csv_file',\

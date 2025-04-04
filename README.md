@@ -6,9 +6,6 @@
 👉 POUR LANCER LE PROGRAMME PREDICTION :
     'python -m programs.prediction <nombre mileage> <thetas_filepath>'
 
-## La fonction model(): 
-
-
 ## Les fonctions de couts : 
 
 La MSE (Erreur Quadratique Moyenne) comme la MAE (Mean Absolute Error) sont des fonctions
