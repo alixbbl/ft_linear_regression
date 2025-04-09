@@ -25,15 +25,18 @@ def ft_predict(theta: np.ndarray, mileage: int)-> float:
 def main(args):
     try:
         mileage = 0
-        try: 
-            mileage = int(input('Please enter a realistic mileage : '))
-        except ValueError:
-            print("This won't work for me buddy ...")
-            mileage=0
-        else:
-            mileage=abs(mileage)
-        theta=np.zeros(2)
+        while True:
+            
+            try: 
+                mileage = int(input('Please enter a realistic mileage : '))
+                mileage = abs(mileage)
+                print("Thanks!")
+                break
+            
+            except ValueError:
+                print("This won't work for me buddy ... Please enter a valid integer.")
         
+        theta=np.zeros(2) 
         if os.path.exists(args.thetas_input):
             with open(args.thetas_input, 'r') as thetas_input:
                 theta_lines=thetas_input.readlines()
@@ -86,6 +89,7 @@ if __name__ == "__main__":
                         help = "Corresponds to the path of the theta file.")
     parser.add_argument('data_for_graphic',\
                         type = str,\
+                        default="./data/data.csv",
                         help = "Corresponds to the path of the data file, used for graphic visualization.")
     args = parser.parse_args()
     main(args)
